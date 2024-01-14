@@ -2,14 +2,13 @@ from ROOT import *
 from string import *
 #to code work you have be in the same directory with the histout files.
 
-dict = { #(this is for getting the model we provide)
-	#histogram to compare with the cutflow (the name you give under the countsformat "process SRWZ5, ..."): name of the histout file(the name you see when you press ls) 
-	"SRWZ5" : "test2",
-	"bbX-200-500" : "bbX-si200-500" 
+dict = {
+	#histogram to compare with the cutflow(the name written in adl file): name of the histout file (the file you see when you write "ls" in your terminal)
+	"onshellWZ" : "test2",
 }
 
 #regions to do comparison (this is for getting cutflow)
-regions = ["SRWZ5", "Resolved-200-350-2b"]
+regions = ["SRWZ1","SRWZ2","SRWZ3","SRWZ4","SRWZ5","SRWZ6","SRWZ7","SRWZ8"]
 
 
 for key in dict:
@@ -20,18 +19,18 @@ for key in dict:
 
 	for region in regions:
 		#histogramları çekiyoğ
-		hc = f.Get(region + "/" + "cutflow") #cutflow the result of our adl file
-		hp = f.Get(region + "/" + key) #the histogram write by hand, related to the paper
+		hc = f.Get(region + "/" + "cutflow") #cutflow yani bizim adl'nin sonucu histogram
+		hp = f.Get(region + "/" + key) #elle yazılmış deneysel histogram
 
 		if len(hc) - len(hp) != 1:
-			print("*****WARNING: LENGTHS ARE NOT MATCHING*****", len(hc), len(hp))
+			print("*****WARNING: LENGTHS ARE NOT MATCHING*****", len(hc), len(hp))	
 
 
 		# Obtain nbins from the CL output histogram
 		# Note that CL histo automatically writes total #evts, so it has one more bin
 		nbins = hc.GetXaxis().GetNbins()
 		
-		print("\n ====== Comparing "+hp.GetTitle()+" :")
+		print("\n ====== Comparing "+hp.GetTitle()+" region "+ region + " :")
 		print("\n *** Cumulative comparison - DF:")
 		print("%55s :  %6s  %6s  %6s" % ("Selection", "CL", "Paper", "Error"))
 		nctot = hc.GetBinContent(0+1)
@@ -40,7 +39,7 @@ for key in dict:
 			label = hc.GetXaxis().GetBinLabel(i+1)
 			nc = hc.GetBinContent(i+1)/nctot*100
 			np = hp.GetBinContent(i)/nptot*100
-			diff = 100*(nc - np) / np
+			diff = 100*(nc - np) / np if np != 0 else 0 if nc == 0 else 99999999999
 			print("%55s :  %4.2f  %4.2f  %4.2f" % (label, nc, np, diff))
 		
 		print("\n *** Relative comparison:")
@@ -55,7 +54,7 @@ for key in dict:
 			else:
 				nc = 100 * hc.GetBinContent(i+1) / hc.GetBinContent(i) if hc.GetBinContent(i) != 0 else 0
 				np = 100 * hp.GetBinContent(i) / hp.GetBinContent(i-1) if hp.GetBinContent(i-1) != 0 else 0
-				diff = 100*(nc - np) / np
+				diff = 100*(nc - np) / np if np != 0 else 0 if nc == 0 else 99999999999
 			print("%55s :  %4.2f  %4.2f  %4.2f" % (label, nc, np, diff))
 
 
