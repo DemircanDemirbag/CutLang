@@ -4,11 +4,11 @@ from string import *
 
 dict = {
 	#histogram to compare with the cutflow(the name written in adl file): name of the histout file (the file you see when you write "ls" in your terminal)
-	"onshellWZ" : "test2",
+	"onshellWZ" : "ATLAS-SUSY-2019-09-onshell",
 }
 
 #regions to do comparison (this is for getting cutflow)
-regions = ["SRWZ1","SRWZ2","SRWZ3","SRWZ4","SRWZ5","SRWZ6","SRWZ7","SRWZ8"]
+regions = ["SRWZ1","SRWZ2","SRWZ3","SRWZ4","SRWZ5","SRWZ6","SRWZ7","SRWZ8","SRWZ9","SRWZ10","SRWZ11","SRWZ12","SRWZ13","SRWZ14","SRWZ15","SRWZ16","SRWZ17","SRWZ18","SRWZ19","SRWZ20"]
 
 
 for key in dict:
